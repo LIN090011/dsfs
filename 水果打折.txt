@@ -1,0 +1,153 @@
+grocery_calculation
+Study the examples below and write a program that works exactly like the examples. Money is displayed with 2 digits after the decimal mark.
+For example:
+
+Input	Result
+1
+2
+3.11
+N
+N
+Enter the cost of Fruit&Veg: 1
+Enter the cost of Deli&Chilled Meals: 2
+Enter the cost of Pantry: 3.11
+Would you like to use your 10% Woolworths Mobile discount? Y or N: N
+Would you like to use your $10 Everyday Rewards Dollars? Y or N: N
+
+Receipt:
+Fruit&Veg                                          1.00
+Deli&Chilled Meals                                 2.00
+Pantry                                             3.11
+Total                                             $6.11
+
+Payment                                           $6.11
+100
+12
+2.53
+N
+Y
+Enter the cost of Fruit&Veg: 100
+Enter the cost of Deli&Chilled Meals: 12
+Enter the cost of Pantry: 2.53
+Would you like to use your 10% Woolworths Mobile discount? Y or N: N
+Would you like to use your $10 Everyday Rewards Dollars? Y or N: Y
+
+Receipt:
+Fruit&Veg                                        100.00
+Deli&Chilled Meals                                12.00
+Pantry                                             2.53
+Total                                           $114.53
+
+$10 Everyday Rewards Dollars enjoyed
+
+Payment                                         $104.53
+3.12
+56
+34.21
+Y
+N
+Enter the cost of Fruit&Veg: 3.12
+Enter the cost of Deli&Chilled Meals: 56
+Enter the cost of Pantry: 34.21
+Would you like to use your 10% Woolworths Mobile discount? Y or N: Y
+Would you like to use your $10 Everyday Rewards Dollars? Y or N: N
+
+Receipt:
+Fruit&Veg                                          3.12
+Deli&Chilled Meals                                56.00
+Pantry                                            34.21
+Total                                            $93.33
+
+$9.33 saved with your Woolworths Mobile discount
+Promotional Price                                $84.00
+
+Payment                                          $84.00
+1.98
+34
+8.42
+Y
+Y
+Enter the cost of Fruit&Veg: 1.98
+Enter the cost of Deli&Chilled Meals: 34
+Enter the cost of Pantry: 8.42
+Would you like to use your 10% Woolworths Mobile discount? Y or N: Y
+Would you like to use your $10 Everyday Rewards Dollars? Y or N: Y
+
+Receipt:
+Fruit&Veg                                          1.98
+Deli&Chilled Meals                                34.00
+Pantry                                             8.42
+Total                                            $44.40
+
+$4.44 saved with your Woolworths Mobile discount
+Promotional Price                                $39.96
+
+$10 Everyday Rewards Dollars enjoyed
+
+Payment                                          $29.96
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+fruit = float(input("Enter the cost of Fruit&Veg: "))
+meals = float(input("Enter the cost of Deli&Chilled Meals: "))
+pantry = float(input("Enter the cost of Pantry: "))
+
+data = [
+    {"name": "Fruit&Veg", "cost": fruit},
+    {"name": "Deli&Chilled Meals", "cost": meals},
+    {"name": "Pantry", "cost": pantry},
+    {"name": "Total", "cost": fruit + meals + pantry},
+]
+
+payment = { "name": "Payment", "cost": fruit + meals + pantry }
+
+use_discount = input("Would you like to use your 10% Woolworths Mobile discount? Y or N: ")
+use_rewards = input("Would you like to use your $10 Everyday Rewards Dollars? Y or N: ")
+
+def print_item(item, with_dollar=False):
+    width = 55 - len(item["name"])
+    if with_dollar:
+        price = f"${item['cost']:.2f}"
+        print(f"{item['name']}{price:>{width}}")
+    else:
+        print(f"{item['name']}{item['cost']:>{width}.2f}")
+
+print()
+print("Receipt:")
+for item in data:
+    print_item(item, item["name"] == "Total")
+
+if use_discount == "Y":
+    discount = (fruit + meals + pantry) * 0.1
+    print()
+    print(f"${discount:.2f} saved with your Woolworths Mobile discount")
+    print_item({"name": "Promotional Price", "cost": fruit + meals + pantry - discount}, True)
+    payment["cost"] -= discount
+
+if use_rewards == "Y":
+    if payment["cost"] >= 10:
+        print()
+        print("$10 Everyday Rewards Dollars enjoyed")
+        payment["cost"] -= 10
+    else:
+        payment["cost"] = 0
+
+print()
+print_item(payment, True)
